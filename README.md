@@ -19,6 +19,19 @@ npm run dev:all
 
 Open `http://localhost:5173`. Copy the collaboration URL and open it in another browser/profile. Edits should converge through Automerge.
 
+`npm run test:e2e` drives two isolated browsers against the dev servers and checks that concurrent edits converge (first run: `npx playwright install chromium`).
+
+## Run in GitHub Codespaces
+
+Only port **5173** is exposed. The browser talks HTTPS/WSS to Vite, and Vite proxies the `/sync` WebSocket to the sync server on `127.0.0.1:3030` inside the container. Port 3030 is never forwarded.
+
+1. **Code → Codespaces → Create codespace on this branch.** The devcontainer installs R, Node, Quarto and runs `npm install`.
+2. In the Codespace terminal: `npm run dev:all`
+3. Open the **Ports** tab and open the forwarded address for 5173 (`https://<codespace>-5173.app.github.dev`).
+4. Click **Copy collaboration URL** (it includes `#automerge:...`) and open it in a second browser.
+
+Port visibility matters for the second browser. Forwarded ports are **private** by default, which means only you, signed in to GitHub, can open them. To let someone else join, right-click port 5173 → **Port Visibility** → **Public** (anyone with the URL) or **Private to Organization**. The sync server has no authentication of its own, so treat a public URL as a write-access link and switch it back to private when you're done.
+
 ## Why this is only the editor half
 
 The Automerge document and `index.qmd` are intentionally separate in this prototype. The production design should add a **Git/file bridge** that:

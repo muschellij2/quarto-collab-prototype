@@ -23,6 +23,11 @@
       "onAutoForward": "openPreview"
     },
 
+    "3030": {
+      "label": "Automerge sync (internal, proxied via 5173/sync)",
+      "onAutoForward": "ignore"
+    },
+
     "4200": {
       "label": "Quarto preview",
       "onAutoForward": "silent"

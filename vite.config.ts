@@ -17,6 +17,9 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5173,
+    // Codespaces forwards requests with Host: <codespace>-5173.app.github.dev,
+    // which Vite's DNS-rebinding protection rejects by default.
+    allowedHosts: [".app.github.dev"],
 
     proxy: {
       "/sync": {
