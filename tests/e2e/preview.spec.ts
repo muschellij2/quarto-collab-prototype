@@ -8,7 +8,7 @@ test("quarto preview re-renders collaborative edits", async ({ page }) => {
   test.setTimeout(120_000);
   await page.goto("/");
   const preview = page.frameLocator("#preview");
-  await expect(preview.locator("h1").first()).toContainText("Collaborative Quarto", { timeout: 60_000 });
+  await expect(preview.locator("body")).toContainText("canonical Git-backed Quarto file", { timeout: 60_000 });
 
   await page.locator(".cm-content").click();
   await page.keyboard.press("ControlOrMeta+End");
