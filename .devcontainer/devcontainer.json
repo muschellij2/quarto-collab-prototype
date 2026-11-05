@@ -10,7 +10,7 @@
     "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {}
   },
 
-  "postCreateCommand": "npm install && R -q -e 'if (!requireNamespace(\"renv\", quietly=TRUE)) install.packages(\"renv\")'",
+  "postCreateCommand": "npm install && R -q -e 'install.packages(c(\"renv\", \"knitr\", \"rmarkdown\"))'",
 
   "forwardPorts": [
     5173
