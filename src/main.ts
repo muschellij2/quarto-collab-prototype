@@ -31,7 +31,9 @@ mean(x)
 \`\`\`
 `;
 
-const syncUrl = import.meta.env.VITE_SYNC_URL || `${location.protocol === "https:" ? "wss" : "ws"}://${location.hostname}:3030`;
+const syncUrl =
+  import.meta.env.VITE_SYNC_URL ||
+  `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/sync`;
 const repo = new Repo({
   storage: new IndexedDBStorageAdapter("quarto-collab"),
   network: [
