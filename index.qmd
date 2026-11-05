@@ -1,0 +1,13 @@
+---
+title: "Collaborative Quarto"
+format: html
+---
+
+# Hello
+
+This is the canonical Git-backed Quarto file.
+
+```{r}
+x <- rnorm(100)
+mean(x)
+```

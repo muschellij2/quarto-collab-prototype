@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.automerge-data/
+.quarto/
+_site/
+.Rproj.user/
+.Rhistory
+.RData

@@ -1,0 +1,8 @@
+project:
+  type: website
+website:
+  title: "Quarto Collab Prototype"
+format:
+  html: default
+execute:
+  freeze: auto
