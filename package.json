@@ -18,6 +18,7 @@
     "@automerge/automerge-repo-network-websocket": "^2.5.4",
     "@automerge/automerge-repo-storage-indexeddb": "^2.5.4",
     "@automerge/automerge-repo-storage-nodefs": "^2.5.4",
+    "@codemirror/commands": "^6.11.1",
     "@codemirror/lang-markdown": "^6.3.4",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.38.2",
@@ -32,7 +33,6 @@
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
-    "vite-plugin-top-level-await": "^1.6.0",
     "vite-plugin-wasm": "^3.6.0"
   }
 }
