@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "sync": "tsx server/sync-server.ts",
-    "dev:all": "concurrently -k \"npm:sync\" \"npm:dev\"",
+    "dev:all": "concurrently -k \"npm:sync\" \"npm:dev\" \"npm:quarto\"",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test:e2e": "playwright test",
-    "test": "tsx --test --test-timeout=30000 tests/*.test.ts"
+    "test": "tsx --test --test-timeout=30000 tests/*.test.ts",
+    "quarto": "quarto preview paper --port 4200 --no-browser"
   },
   "dependencies": {
     "@automerge/automerge": "^3.5.0",

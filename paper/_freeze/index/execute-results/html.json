@@ -1,0 +1,15 @@
+{
+  "hash": "9c9ff2d107ba85dbe04b31220f22f55a",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Collaborative Quarto\"\nformat: html\n---\n\n# Hello\n\nThis is the canonical Git-backed Quarto file.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nx <- rnorm(100)\nmean(x)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] -0.07011262\n```\n\n\n:::\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -11,8 +11,8 @@ const port = Number(process.env.SYNC_PORT || 3030);
 // Loopback only: browsers reach this through Vite's /sync proxy, and the
 // server has no authentication.
 const host = process.env.SYNC_HOST || "127.0.0.1";
-// The project whose .qmd files are bridged (tests point this at a scratch copy).
-const root = path.resolve(process.env.COLLAB_ROOT || ".");
+// The Quarto project whose .qmd files are bridged (tests use a scratch copy).
+const root = path.resolve(process.env.COLLAB_ROOT || "paper");
 
 // .qmd files in the project, skipping dot dirs, Quarto output (_site,
 // _freeze, ...) and node_modules.

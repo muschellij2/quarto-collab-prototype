@@ -37,6 +37,6 @@ test("two browsers converge on concurrent edits", async ({ browser }) => {
 
   // The filesystem bridge materializes the merged text into the real file.
   await expect
-    .poll(() => fs.readFile(".e2e-root/index.qmd", "utf8"))
+    .poll(() => fs.readFile("e2e-root/index.qmd", "utf8"))
     .toMatch(/^from-B---[\s\S]*from-A$/);
 });

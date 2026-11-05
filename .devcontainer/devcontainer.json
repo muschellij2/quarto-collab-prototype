@@ -13,8 +13,7 @@
   "postCreateCommand": "npm install && R -q -e 'if (!requireNamespace(\"renv\", quietly=TRUE)) install.packages(\"renv\")'",
 
   "forwardPorts": [
-    5173,
-    4200
+    5173
   ],
 
   "portsAttributes": {
@@ -29,8 +28,8 @@
     },
 
     "4200": {
-      "label": "Quarto preview",
-      "onAutoForward": "silent"
+      "label": "Quarto preview (internal, proxied via 5173/preview/)",
+      "onAutoForward": "ignore"
     }
   }
 }

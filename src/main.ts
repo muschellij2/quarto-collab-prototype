@@ -58,6 +58,10 @@ app.innerHTML = `
       </div>
       <div id="editor"></div>
     </section>
+    <section class="preview-pane">
+      <div class="toolbar"><strong>Quarto preview</strong><a href="/preview/" target="_blank">open in new tab</a></div>
+      <iframe id="preview" src="/preview/" title="Quarto preview"></iframe>
+    </section>
     <aside>
       <h3>Local R output</h3>
       <p class="hint">Runs compatible <code>{r}</code> chunks in this browser with webR. This is optional; canonical renders should run in the repo's container/Codespace.</p>

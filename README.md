@@ -10,20 +10,48 @@ A deliberately small “Overleaf for Quarto” proof-of-concept:
 - **Quarto + R in a devcontainer/Codespace** remains the canonical reproducible execution environment.
 - **GitHub** remains the durable project/version-review layer.
 
+## Layout
+
+- `paper/`: the Quarto project (`_quarto.yml`, `index.qmd`). These are the real, Git-tracked files.
+- `src/`, `index.html`: the browser editor (Vite).
+- `server/`: the Automerge sync server and the filesystem bridge.
+
+The Quarto project lives in its own folder because a Quarto website at the repository root would treat the editor's `index.html` as rendered output of `index.qmd` and delete it.
+
 ## Run
 
 ```bash
 npm install
-npm run dev:all
+npm run dev:all   # sync server + filesystem bridge, Vite, and quarto preview
 ```
 
-Open `http://localhost:5173`. Copy the collaboration URL and open it in another browser/profile. Edits should converge through Automerge.
+`quarto` must be on your PATH. On macOS with RStudio you can use the bundled copy: `export PATH="/Applications/RStudio.app/Contents/Resources/app/quarto/bin:$PATH"`.
 
-`npm run test:e2e` drives two isolated browsers against the dev servers and checks that concurrent edits converge (first run: `npx playwright install chromium`).
+Open `http://localhost:5173`. The editor opens `paper/index.qmd`, and the middle pane shows the rendered preview (also at `/preview/`). Copy the collaboration URL and open it in another browser to edit together.
+
+## What happens when you type
+
+1. Every keystroke is an Automerge change, synced to other browsers through the server.
+2. About 200 ms after typing pauses, the server writes the text to `paper/index.qmd`. It writes a temp file and renames it, so readers never see a half-written file.
+3. `quarto preview` sees the file change, re-renders, and the preview reloads.
+4. `git diff` shows ordinary changes to `paper/index.qmd`. Commit them as usual; nothing is committed automatically.
+
+You can also edit `paper/index.qmd` in VS Code (or `git checkout` it) while people are typing in the browser. The server merges the file change into the Automerge document as a concurrent edit, so neither side's work is lost. Edits made while the server was stopped are merged the same way on the next start.
+
+During a session, the Automerge document is authoritative and the file is kept in step with it. The server's state lives in `paper/.automerge-data/` and `paper/.automerge-bridge.json` (both ignored by Git). Deleting them is safe: the server re-imports from the `.qmd` files, but open browser tabs must then be reloaded without the old `#automerge:` URL.
+
+## Tests
+
+```bash
+npm test           # filesystem bridge: concurrent edits, restarts, CRLF/BOM
+npm run test:e2e   # two browsers, webR, and live Quarto preview (first: npx playwright install chromium)
+```
+
+The e2e tests start their own servers on ports 5174/3031/4201 against a scratch copy in `e2e-root/`, so they don't touch a running session. The preview test is skipped if `quarto` is not on PATH, and the webR test needs network access.
 
 ## Run in GitHub Codespaces
 
-Only port **5173** is exposed. The browser talks HTTPS/WSS to Vite, and Vite proxies the `/sync` WebSocket to the sync server on `127.0.0.1:3030` inside the container. Port 3030 is never forwarded.
+Only port **5173** is exposed. The browser talks HTTPS/WSS to Vite, which proxies `/sync` to the sync server (`127.0.0.1:3030`) and `/preview/` to `quarto preview` (`127.0.0.1:4200`, mounted at `/proxy/4200/` because Quarto's live-reload understands that prefix). Ports 3030 and 4200 are never forwarded.
 
 1. **Code → Codespaces → Create codespace on this branch.** The devcontainer installs R, Node, Quarto and runs `npm install`.
 2. In the Codespace terminal: `npm run dev:all`
@@ -31,18 +59,6 @@ Only port **5173** is exposed. The browser talks HTTPS/WSS to Vite, and Vite pro
 4. Click **Copy collaboration URL** (it includes `#automerge:...`) and open it in a second browser.
 
 Port visibility matters for the second browser. Forwarded ports are **private** by default, which means only you, signed in to GitHub, can open them. To let someone else join, right-click port 5173 → **Port Visibility** → **Public** (anyone with the URL) or **Private to Organization**. The sync server has no authentication of its own, so treat a public URL as a write-access link and switch it back to private when you're done.
-
-## Why this is only the editor half
-
-The Automerge document and `index.qmd` are intentionally separate in this prototype. The production design should add a **Git/file bridge** that:
-
-1. imports a `.qmd` file into an Automerge document;
-2. watches the Automerge document and atomically materializes its text to the working tree;
-3. watches external filesystem/Git changes and applies them back to Automerge as text splices;
-4. creates explicit checkpoints/commits instead of committing keystrokes;
-5. detects destructive rewrites and asks for reconciliation rather than silently replacing live state.
-
-That bridge is the most important next component.
 
 ## Recommended document model
 
@@ -74,7 +90,7 @@ Run the actual repository in a Codespace/devcontainer with pinned R packages (`r
 
 - authentication / authorization and per-document ACLs;
 - presence, cursors, comments, suggestions;
-- filesystem ↔ Automerge bridge;
+- new or deleted `.qmd` files while the server runs (files are discovered at startup);
 - Quarto syntax services and visual/source reconciliation;
 - canonical render service and preview streaming;
 - secrets and data-access isolation;

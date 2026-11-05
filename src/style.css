@@ -4,7 +4,7 @@ body { margin: 0; }
 header { height: 56px; padding: 0 18px; background: white; border-bottom: 1px solid #ddd; display:flex; align-items:center; justify-content:space-between; }
 .tag { margin-left: 12px; font-size: 12px; color:#64748b; }
 #status { font-size: 12px; color:#64748b; }
-main { display:grid; grid-template-columns: minmax(0, 1fr) 360px; height: calc(100vh - 56px); }
+main { display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 320px; height: calc(100vh - 56px); }
 .editor-pane { min-width:0; display:flex; flex-direction:column; }
 .toolbar { height:48px; display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid #ddd; background:#fafafa; }
 button { border:1px solid #cbd5e1; border-radius:6px; padding:7px 11px; background:white; cursor:pointer; }
@@ -13,8 +13,10 @@ button:disabled { opacity:.55; cursor:wait; }
 #editor { flex:1; overflow:auto; background:white; }
 .cm-editor { height:100%; font-size:15px; }
 .cm-scroller { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.preview-pane { min-width:0; display:flex; flex-direction:column; border-left:1px solid #ddd; }
+#preview { flex:1; border:0; background:white; }
 aside { border-left:1px solid #ddd; padding:18px; overflow:auto; background:#fbfbfd; }
 aside h3 { margin-top:0; }
 .hint { color:#64748b; font-size:13px; line-height:1.4; }
 pre { white-space:pre-wrap; background:#111827; color:#e5e7eb; padding:12px; border-radius:8px; min-height:160px; }
-@media (max-width: 900px) { main { grid-template-columns:1fr; } aside { display:none; } }
+@media (max-width: 900px) { main { grid-template-columns:1fr; } aside, .preview-pane { display:none; } }
