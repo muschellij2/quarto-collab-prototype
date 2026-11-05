@@ -23,9 +23,10 @@ export default defineConfig({
 
     proxy: {
       "/sync": {
-        target: "ws://127.0.0.1:3030",
+        target: `ws://127.0.0.1:${process.env.SYNC_PORT || 3030}`,
         ws: true,
       },
+      "/api": `http://127.0.0.1:${process.env.SYNC_PORT || 3030}`,
     },
   },
 });

@@ -8,3 +8,5 @@ _site/
 .RData
 test-results/
 playwright-report/
+.automerge-bridge.json
+.e2e-root/

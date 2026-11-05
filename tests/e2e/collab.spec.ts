@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import fs from "node:fs/promises";
 
 const editorText = (page: Page) =>
   page.evaluate(() => document.querySelector(".cm-content")!.textContent ?? "");
@@ -33,4 +34,9 @@ test("two browsers converge on concurrent edits", async ({ browser }) => {
   }
   expect(await editorText(a)).toBe(await editorText(b));
   expect(errors).toEqual([]);
+
+  // The filesystem bridge materializes the merged text into the real file.
+  await expect
+    .poll(() => fs.readFile(".e2e-root/index.qmd", "utf8"))
+    .toMatch(/^from-B---[\s\S]*from-A$/);
 });

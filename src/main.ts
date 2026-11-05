@@ -53,6 +53,7 @@ app.innerHTML = `
       <div class="toolbar">
         <button id="share">Copy collaboration URL</button>
         <button id="run-r">Run R chunks locally</button>
+        <select id="file"></select>
         <span id="doc-id"></span>
       </div>
       <div id="editor"></div>
@@ -64,10 +65,24 @@ app.innerHTML = `
     </aside>
   </main>`;
 
+// Files the server bridges to disk, each with its Automerge document URL.
+const files: { path: string; url: string }[] = await fetch("/api/files").then((r) => r.json());
+const fileSelect = document.querySelector<HTMLSelectElement>("#file")!;
+fileSelect.innerHTML = files.map((f) => `<option value="${f.url}">${f.path}</option>`).join("");
+fileSelect.onchange = () => {
+  location.hash = encodeURIComponent(fileSelect.value);
+  location.reload();
+};
+
 async function getHandle() {
   const hash = decodeURIComponent(location.hash.slice(1));
   if (hash && isValidAutomergeUrl(hash)) {
     return repo.find<QDoc>(hash);
+  }
+  const file = files.find((f) => f.path === "index.qmd") ?? files[0];
+  if (file) {
+    location.hash = encodeURIComponent(file.url);
+    return repo.find<QDoc>(file.url);
   }
   const handle = repo.create<QDoc>({ path: "index.qmd", text: DEFAULT_QMD, updatedAt: Date.now() });
   location.hash = encodeURIComponent(handle.url);
@@ -79,6 +94,7 @@ await handle.whenReady();
 const initial = handle.doc();
 if (!initial) throw new Error("Automerge document failed to load");
 
+fileSelect.value = handle.url;
 document.querySelector("#doc-id")!.textContent = handle.url;
 document.querySelector("#status")!.textContent = "local-first • sync enabled";
 
