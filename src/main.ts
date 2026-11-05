@@ -132,7 +132,7 @@ document.querySelector<HTMLButtonElement>("#run-r")!.onclick = async () => {
     for (let i = 0; i < chunks.length; i++) {
       const shelter = await new webR.Shelter();
       try {
-        const result = await shelter.captureR(chunks[i]);
+        const result = await shelter.captureR(chunks[i], { withAutoprint: true });
         lines.push(`## R chunk ${i + 1}`);
         lines.push(...result.output.map((x: any) => x.data));
       } finally {

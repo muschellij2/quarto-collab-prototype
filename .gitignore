@@ -6,3 +6,5 @@ _site/
 .Rproj.user/
 .Rhistory
 .RData
+test-results/
+playwright-report/
